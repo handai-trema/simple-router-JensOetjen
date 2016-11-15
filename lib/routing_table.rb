@@ -1,5 +1,3 @@
-require 'pio'
-
 # Routing table
 class RoutingTable
   include Pio
@@ -15,6 +13,16 @@ class RoutingTable
     netmask_length = options.fetch(:netmask_length)
     prefix = IPv4Address.new(options.fetch(:destination)).mask(netmask_length)
     @db[netmask_length][prefix.to_i] = IPv4Address.new(options.fetch(:next_hop))
+  end
+  
+   def delete(options)
+    netmask_length = options.fetch(:netmask_length)
+    prefix = IPv4Address.new(options.fetch(:destination)).mask(netmask_length)
+    @db[netmask_length].delete(prefix.to_i)
+  end
+  
+  def getDB()
+    return @db
   end
 
   def lookup(destination_ip_address)
